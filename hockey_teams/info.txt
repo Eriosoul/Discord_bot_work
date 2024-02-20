@@ -1,0 +1,7 @@
+En este ejercicio se comprueba el tiempo a la hora de ralzar un Scap web con sesion y sin sesion
+
+Sin session:
+- dura mas a la hora de obtener los datos
+
+Con Session:
+- el tiempo es mas rapido que el de sin Session
