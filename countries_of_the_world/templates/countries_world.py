@@ -3,19 +3,14 @@ import requests
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 from typing import List
-from dataclasses import dataclass
+from countries_of_the_world.lib.data_country import Country
 
-@dataclass
-class Country:
-    country_name: str
-    capital: str
-    population: int
-    area: float
 
 class CountriesOfWorld:
     def __init__(self):
         load_dotenv()
         self.url = os.getenv("LINK")
+        self.data_class = Country(country_name="", capital="", population=0 ,area=0.0)
 
     def get_status(self):
         try:
