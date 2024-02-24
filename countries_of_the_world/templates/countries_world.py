@@ -3,8 +3,7 @@ import requests
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 from typing import List
-from countries_of_the_world.lib.data_country import Country
-
+from countries_of_the_world.templates.lib.data_country import Country
 
 class CountriesOfWorld:
     def __init__(self):
