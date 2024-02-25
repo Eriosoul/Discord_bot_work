@@ -1,4 +1,4 @@
-from templates.countries_world import main
+from templates.SQL.connection_db import main_db
 
 if __name__ == '__main__':
-    main()
+    main_db()
