@@ -2,7 +2,8 @@ import os
 import mysql.connector
 from dotenv import load_dotenv
 from mysql.connector import Error
-from insert_data import estoy_en_insert
+from typing import List
+from countries_of_the_world.templates.lib.data_country import Country
 class DataBaseCountry:
     def __init__(self):
         load_dotenv()
@@ -18,6 +19,8 @@ class DataBaseCountry:
             password= psw,
             database= database,
         )
+        # self.insert_data = InsetDataCountry.insert_data(
+        #     data=[Country.country_name, Country.capital, Country.population, Country.area])
 
     def get_connection(self):
         try:
@@ -31,7 +34,7 @@ class DataBaseCountry:
                 result = cursor.fetchone()
                 if result:
                     print("la tabla 'paises_del_mundo' exite")
-                    estoy_en_insert()
+                    self.insert_data(data=[])
                 else:
                     print("La tabla no existe 'paises_del_mundo'. Creando tabla...")
                     self.creating_table()
@@ -59,6 +62,26 @@ class DataBaseCountry:
             print(f'Total records in paises_del_mundo table: {total_count}')
         except Error as ex:
             print("Error al crear la tabla:", ex)
+    def insert_data(self, data: List[Country]):
+        try:
+            for entry in data:
+                cursor = self.conn.cursor()
+                cursor.execute('SELECT COUNT(*) FROM paises_del_mundo WHERE p_pais=%s AND p_nombre=%s',
+                               (entry.country_name, entry.capital))
+                existing_count = cursor.fetchone()[0]
+                if existing_count == 0:
+                    cursor.execute('''
+                    INSERT INTO `paises_del_mundo`(`_id`, `p_pais`, `p_nombre`, `p_poblacion`, `p_area`) 
+                    VALUES (%s, %s, %s, %s, %s)
+                    ''', (entry.country_name, entry.capital, entry.population, entry.area))
+                    print(f"Datos chequeados e insertandose {entry.country_name, entry.capital}")
+                else:
+                    print("datos no repetidos")
+            self.conn.commit()
+            print("Datos insertados exitosamente.")
+        except Error as ex:
+            print("Error: ", ex)
+            return None
 
 if __name__ == '__main__':
     db: DataBaseCountry = DataBaseCountry()
